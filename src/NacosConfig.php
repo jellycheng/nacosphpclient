@@ -36,12 +36,17 @@ class NacosConfig
      * @param $tenant 租户信息，对应 Nacos 的命名空间ID值字段，不是命名空间名称
      * @param $type 配置类型
      */
-    public function publishConfig($dataId, $group, $content,$tenant = '',$type='') {
+    public function publishConfig($dataId, $group, $content, $tenant = '',$type='') {
+        $ret = [
+            'code'=>'',
+            'msg'=>'',
+            'data'=>'',
+        ];
         $url = sprintf("%s/nacos/v1/cs/configs?dataId=%s&group=%s&content=%s",
                         $this->nacosClient->getConfigServer(),
                         $dataId,
                         $group,
-                        $content
+                        urlencode($content)
                     );
         if($tenant) {
             $url .= "&tenant=" . $tenant;
@@ -50,7 +55,18 @@ class NacosConfig
             $url .= "&type=" . $type;
         }
 
+        $postData = [];
+        $curlObj = Curl::boot()->post($url, $postData);
+        $ret['code'] = $curlObj->getErrno();
+        $content = '';
+        if(!$ret['code']) {
+            $content = $curlObj->getResponse(); //内容
+        } else {
+            $ret['msg'] = $curlObj->getErrmsg();
+        }
+        $ret['data'] = $content;
 
+        return $ret;
     }
 
     /**
@@ -100,16 +116,30 @@ class NacosConfig
      * @param $tenant 租户信息，对应 Nacos 的命名空间ID字段
      */
     public function deleteConfig($dataId, $group,$tenant = '') {
-
+        $ret = [
+            'code'=>'',
+            'msg'=>'',
+            'data'=>'',
+        ];
         $url = sprintf("%s/nacos/v1/cs/configs?dataId=%s&group=%s",
-            $this->nacosClient->getConfigServer(),
-            $dataId,
-            $group
-        );
+                        $this->nacosClient->getConfigServer(),
+                        $dataId,
+                        $group
+                    );
         if($tenant) {
             $url .= "&tenant=" . $tenant;
         }
+        $curlObj = Curl::boot()->setRequestMethod("DELETE")->setUrl($url)->request();
+        $ret['code'] = $curlObj->getErrno();
+        $content = '';
+        if(!$ret['code']) {
+            $content = $curlObj->getResponse(); //内容
+        } else {
+            $ret['msg'] = $curlObj->getErrmsg();
+        }
+        $ret['data'] = $content;
 
+        return $ret;
     }
 
 }

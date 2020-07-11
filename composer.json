@@ -19,15 +19,5 @@
       "files": [
         "src/helper.php"
       ]
-    },
-    "prefer-stable": true,
-    "minimum-stability": "dev",
-    "config": {
-      "preferred-install": "dist"
-    },
-    "type": "project",
-    "scripts": {
-      "post-update-cmd": ["find vendor/ -name .git | xargs rm -rf"],
-      "post-install-cmd": ["find vendor/ -name .git | xargs rm -rf"]
     }
 }
