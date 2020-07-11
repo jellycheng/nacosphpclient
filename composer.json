@@ -1,0 +1,33 @@
+{
+    "name": "cjs/nacoslient",
+    "description": "php nacos client",
+    "license": "MIT",
+    "repositories": [
+      {"type":"vcs", "url":"https://github.com/jellycheng/phpsignal.git"},
+      {"type":"vcs", "url":"https://github.com/jellycheng/cjsEnv.git"}
+    ],
+    "require": {
+        "php": ">=7.0",
+        "cjs/env":"dev-master",
+        "cjs/curl":"dev-master",
+        "cjs/phpsignal":"dev-master"
+    },
+    "autoload": {
+      "psr-4": {
+        "CjsNacos\\": "src/"
+      },
+      "files": [
+        "src/helper.php"
+      ]
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "config": {
+      "preferred-install": "dist"
+    },
+    "type": "project",
+    "scripts": {
+      "post-update-cmd": ["find vendor/ -name .git | xargs rm -rf"],
+      "post-install-cmd": ["find vendor/ -name .git | xargs rm -rf"]
+    }
+}

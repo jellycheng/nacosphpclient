@@ -1,0 +1,14 @@
+
+.DS_Store
+composer.lock
+log/*
+*.log
+.env
+.idea
+.vscode
+.buildpath
+.project
+.settings
+.htaccess
+nohup.out
+vendor
