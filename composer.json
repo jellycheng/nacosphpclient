@@ -1,5 +1,5 @@
 {
-    "name": "cjs/nacoslient",
+    "name": "cjs/nacosclient",
     "description": "php nacos client",
     "license": "MIT",
     "repositories": [
