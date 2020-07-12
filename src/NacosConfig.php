@@ -101,12 +101,56 @@ class NacosConfig
         return $ret;
     }
 
-    public function listenerConfig($ListeningConfigs, $timeout = 30000) {
+    /**
+     * 监听配置，post请求
+     * @param $dataId
+     * @param $group
+     * @param string $tenant
+     * @param string $contentMd5
+     * @param int $timeout
+     * @return array
+     */
+    public function listenerConfig($dataId, $group,$tenant = '',$contentMd5='', $timeout = 30000) {
+        $ret = [
+            'code'=>'',
+            'msg'=>'',
+            'data'=>'',
+        ];
+
         $url = sprintf("%s/nacos/v1/cs/configs/listener",
                         $this->nacosClient->getConfigServer()
                     );
+        $headers = [
+                    'Long-Pulling-Timeout'=>$timeout,
+                    "Content-Type" => "application/x-www-form-urlencoded"
+                    ];
 
+        $listeningConfigs = sprintf(
+                            "%s%s%s%s%s%s%s%s",
+                            $dataId,
+                            twoEncode(),
+                            $group,
+                            twoEncode(),
+                            $contentMd5,
+                            twoEncode(),
+                            $tenant,
+                            oneEncode()
+                        );
 
+        $postData = [
+                    'Listening-Configs'=>$listeningConfigs,
+                ];
+        $curlObj = Curl::boot()->setHeaders($headers)->post($url, $postData);
+        $ret['code'] = $curlObj->getErrno();
+        $content = '';
+        if(!$ret['code']) {
+            $content = $curlObj->getResponse(); //内容
+        } else {
+            $ret['msg'] = $curlObj->getErrmsg();
+        }
+        $ret['data'] = $content;
+
+        return $ret;
     }
 
     /**
