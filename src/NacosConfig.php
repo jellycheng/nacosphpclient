@@ -13,18 +13,13 @@ class NacosConfig
 {
     protected $nacosClient;
 
-    public static function getInstance() {
-        static $instance;
-        if($instance != null) {
-            return $instance;
-        }
-        $instance = new static();
-        return $instance;
-    }
-
     public function setNacosClient($nacosClientObj) {
         $this->nacosClient = $nacosClientObj;
         return $this;
+    }
+
+    public function getNacosClient() {
+        return $this->nacosClient;
     }
 
     /**
